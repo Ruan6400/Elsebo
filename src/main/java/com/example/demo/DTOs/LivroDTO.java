@@ -8,4 +8,5 @@ import lombok.Setter;
 public class LivroDTO {
     private String titulo;
     private Long autorId;
+    private Long editoraId;
 }

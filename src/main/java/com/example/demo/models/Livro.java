@@ -19,8 +19,13 @@ public class Livro {
     @JoinColumn(name = "autor_id", nullable = false)
     private Autor autor;
 
+    @ManyToOne
+    @JoinColumn(name = "editora_id", nullable = false)
+    private Editora editora;
+
     public Livro(){}
-    public Livro(String titulo,Autor autor){
+    public Livro(String titulo,Autor autor, Editora editora) {
+        this.editora = editora;
         this.titulo = titulo;
         this.autor = autor;
     }
