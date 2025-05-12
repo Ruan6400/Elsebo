@@ -24,8 +24,14 @@ public class CloudinaryService {
         ));
     }
 
-    public String uploadFile(MultipartFile file) throws IOException {
-        Map<?,?> uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+    public String uploadFile(MultipartFile file,String editora, String autor) throws IOException {
+        Map<?,?> options = ObjectUtils.asMap(
+                "public_id", "livros/" + editora + "/" + autor + "/" + file.getOriginalFilename(),
+                "overwrite", true,
+                "unique_filename", false,
+                "resource_type", "image"
+        );
+        Map<?,?> uploadResult = cloudinary.uploader().upload(file.getBytes(), options);
         return uploadResult.get("secure_url").toString();
     }
 }

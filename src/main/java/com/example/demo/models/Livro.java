@@ -13,6 +13,7 @@ public class Livro {
     private Long id;
 
     private String titulo;
+    private String capa_url;
 
 
     @ManyToOne
@@ -24,10 +25,11 @@ public class Livro {
     private Editora editora;
 
     public Livro(){}
-    public Livro(String titulo,Autor autor, Editora editora) {
+    public Livro(String titulo,Autor autor, Editora editora, String capa_url){
         this.editora = editora;
         this.titulo = titulo;
         this.autor = autor;
+        this.capa_url = capa_url;
     }
 
 }

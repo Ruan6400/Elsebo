@@ -1,5 +1,7 @@
 package com.example.demo.DTOs;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -7,6 +9,7 @@ import lombok.Setter;
 @Getter
 public class LivroDTO {
     private String titulo;
-    private Long autorId;
-    private Long editoraId;
+    private String autor;
+    private String editora;
+    private MultipartFile file;
 }

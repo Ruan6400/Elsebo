@@ -1,8 +1,7 @@
 package com.example.demo.controllers;
-import java.io.IOException;
 
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.services.AutorService;
 import com.example.demo.services.LivroService;
@@ -46,24 +45,24 @@ public class MainController {
         return "Adicionado";
     }
 
-    @PostMapping("/livro")
-    public String AddLivro(@RequestBody LivroDTO livroDTO){
-        livroService.criarLivro(
+    @PostMapping(value = "/livro", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public String AddLivro(@ModelAttribute LivroDTO livroDTO){
+        try{
+            String url ="";
+            if(livroDTO.getFile() != null) {
+                url = cloudinaryService.uploadFile(livroDTO.getFile(),livroDTO.getEditora(), livroDTO.getAutor());
+            }
+            livroService.criarLivro(
             livroDTO.getTitulo(),
-            livroDTO.getAutorId(),
-            livroDTO.getEditoraId());
-        return "Adicionado";
-    }
-
-    @PostMapping("/imagem")
-    public String AddImagem(@RequestParam("file") MultipartFile file) {
-        try {
-            String url = cloudinaryService.uploadFile(file);
-            return url;
-        } catch (IOException e) {
+            livroDTO.getAutor(),
+            livroDTO.getEditora(),
+            url);
+            return "Adicionado";
+        }catch (Exception e){
             e.printStackTrace();
-            return "Erro ao fazer upload da imagem";
+            return "Erro ao cadastar o livro";
         }
+        /**/
     }
     
 }

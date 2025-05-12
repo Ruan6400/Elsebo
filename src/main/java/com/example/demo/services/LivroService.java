@@ -20,11 +20,11 @@ public class LivroService {
         this.livroRepository  = livroRepository;
     }
 
-    public Livro criarLivro(String titulo, Long autorId, Long editoraId) {
-        Autor autor = autorRepository.findById(autorId).orElseThrow(()->new RuntimeException("Autor não encontrado com id "+autorId));
-        Editora editora = editoraRepository.findById(editoraId).orElseThrow(()->new RuntimeException("Editora não encontrada com id "+editoraId));
+    public Livro criarLivro(String titulo, String nomeAutor, String nomeEditora,String capa_url) {
+        Autor autor = autorRepository.findByNome(nomeAutor).orElseThrow(()->new RuntimeException("Autor não encontrado com nome "+nomeAutor));
+        Editora editora = editoraRepository.findByNome(nomeEditora).orElseThrow(()->new RuntimeException("Editora não encontrada com nome "+nomeEditora));
 
-        Livro livro = new Livro(titulo,autor,editora);
+        Livro livro = new Livro(titulo,autor,editora,capa_url);
         return livroRepository.save(livro);
     }
 }
