@@ -7,6 +7,8 @@ import com.example.demo.services.AutorService;
 import com.example.demo.services.LivroService;
 import com.example.demo.services.EditoraService;
 import com.example.demo.services.CloudinaryService;
+import com.example.demo.services.FuncionarioService;
+import com.example.demo.services.CriptoService;
 import com.example.demo.DTOs.LivroDTO;
 import com.example.demo.DTOs.FuncionarioDTO;
 import com.example.demo.models.Autor;
@@ -14,7 +16,6 @@ import com.example.demo.models.Editora;
 import com.example.demo.models.Gerente;
 import com.example.demo.models.Operacional;
 import com.example.demo.models.Funcionario;
-import com.example.demo.services.FuncionarioService;
 
 
 
@@ -27,21 +28,26 @@ public class MainController {
     private final EditoraService editoraService;
     private final CloudinaryService cloudinaryService;
     private final FuncionarioService funcionarioService;
+    private final CriptoService criptoService;
 
     public MainController(
         AutorService autorService,
         LivroService livroService,
         EditoraService editoraService,
         FuncionarioService funcionarioService,
-        CloudinaryService cloudinaryService) {
+        CloudinaryService cloudinaryService,
+        CriptoService criptoService) {
         this.editoraService = editoraService;
         this.autorService = autorService;
         this.livroService = livroService;
         this.cloudinaryService = cloudinaryService;
         this.funcionarioService = funcionarioService;
+        this.criptoService = criptoService;
 
     }
-
+    public void nada(){
+        
+    }
     @PostMapping("/autor")
     public String Adicionar(@RequestBody Autor autor){
         autorService.salvar(autor);
@@ -76,6 +82,11 @@ public class MainController {
     
     @PostMapping("/cadastrar")
     public String cadastrar(@RequestBody FuncionarioDTO funcionarioDTO) {
+        if(funcionarioDTO.FaltaInformacao()) {
+            return "Faltam informações!";
+        }
+        funcionarioDTO.setSenha(criptoService.codificar(funcionarioDTO.getSenha()));
+        
         if(funcionarioDTO.getNivelCargo().equals("gerente")) {
             Funcionario funcionario = new Gerente(funcionarioDTO);
             funcionarioService.cadastrar(funcionario);

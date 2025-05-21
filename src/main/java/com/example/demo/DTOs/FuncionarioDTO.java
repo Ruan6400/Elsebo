@@ -9,4 +9,13 @@ import lombok.Setter;
 @Getter
 public class FuncionarioDTO extends Funcionario{
     private String nivelCargo;
+    public Boolean FaltaInformacao(){
+        return 
+            this.getNome() == null ||
+            this.getCpf() == null ||
+            this.getEmail() == null ||
+            this.getSenha() == null ||
+            this.getNivelCargo() == null ||
+            this.getTelefone() == null;
+    }
 }
