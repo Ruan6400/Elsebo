@@ -15,7 +15,7 @@ public class FuncionarioService {
         this.operacionalRepository = operacionalRepository;
         this.gerenteRepository = gerenteRepository;
     }
-    public void cadastrarFuncionario(Funcionario funcionario) {
+    public void cadastrar(Funcionario funcionario) {
         if (funcionario instanceof Operacional) {
             operacionalRepository.save((Operacional) funcionario);
         } else if (funcionario instanceof Gerente) {

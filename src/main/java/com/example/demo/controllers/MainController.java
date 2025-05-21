@@ -8,8 +8,13 @@ import com.example.demo.services.LivroService;
 import com.example.demo.services.EditoraService;
 import com.example.demo.services.CloudinaryService;
 import com.example.demo.DTOs.LivroDTO;
+import com.example.demo.DTOs.FuncionarioDTO;
 import com.example.demo.models.Autor;
 import com.example.demo.models.Editora;
+import com.example.demo.models.Gerente;
+import com.example.demo.models.Operacional;
+import com.example.demo.models.Funcionario;
+import com.example.demo.services.FuncionarioService;
 
 
 
@@ -21,16 +26,20 @@ public class MainController {
     private final LivroService livroService;
     private final EditoraService editoraService;
     private final CloudinaryService cloudinaryService;
+    private final FuncionarioService funcionarioService;
 
     public MainController(
         AutorService autorService,
         LivroService livroService,
         EditoraService editoraService,
+        FuncionarioService funcionarioService,
         CloudinaryService cloudinaryService) {
         this.editoraService = editoraService;
         this.autorService = autorService;
         this.livroService = livroService;
         this.cloudinaryService = cloudinaryService;
+        this.funcionarioService = funcionarioService;
+
     }
 
     @PostMapping("/autor")
@@ -65,4 +74,17 @@ public class MainController {
         /**/
     }
     
+    @PostMapping("/cadastrar")
+    public String cadastrar(@RequestBody FuncionarioDTO funcionarioDTO) {
+        if(funcionarioDTO.getNivelCargo().equals("gerente")) {
+            Funcionario funcionario = new Gerente(funcionarioDTO);
+            funcionarioService.cadastrar(funcionario);
+        } else if(funcionarioDTO.getNivelCargo().equals("operacional")) {
+            Funcionario funcionario = new Operacional(funcionarioDTO);
+            funcionarioService.cadastrar(funcionario);
+        } else {
+            return "Cargo inválido!";
+        }
+        return "Funcionario cadastrado com sucesso!";
+    }
 }
