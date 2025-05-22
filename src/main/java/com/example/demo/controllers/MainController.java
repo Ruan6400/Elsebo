@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,6 +11,7 @@ import com.example.demo.services.CloudinaryService;
 import com.example.demo.services.FuncionarioService;
 import com.example.demo.services.CriptoService;
 import com.example.demo.DTOs.LivroDTO;
+import com.example.demo.Utilitarios.JwtUtil;
 import com.example.demo.DTOs.FuncionarioDTO;
 import com.example.demo.models.Autor;
 import com.example.demo.models.Editora;
@@ -48,19 +50,19 @@ public class MainController {
     public void nada(){
         
     }
-    @PostMapping("/autor")
+    @PostMapping("/protected/autor")
     public String Adicionar(@RequestBody Autor autor){
         autorService.salvar(autor);
         return "Salvo";
     }
 
-    @PostMapping("/editora")
+    @PostMapping("/protected/editora")
     public String AddEditora(@RequestBody Editora editora){
         editoraService.salvar(editora);
         return "Adicionado";
     }
 
-    @PostMapping(value = "/livro", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/protected/livro", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public String AddLivro(@ModelAttribute LivroDTO livroDTO){
         try{
             String url ="";
@@ -80,7 +82,7 @@ public class MainController {
         /**/
     }
     
-    @PostMapping("/cadastrar")
+    @PostMapping("/protected/cadastrar")
     public String cadastrar(@RequestBody FuncionarioDTO funcionarioDTO) {
         if(funcionarioDTO.FaltaInformacao()) {
             return "Faltam informações!";
@@ -97,5 +99,11 @@ public class MainController {
             return "Cargo inválido!";
         }
         return "Funcionario cadastrado com sucesso!";
+    }
+
+    @GetMapping("/public/login")
+    public String login(){
+        return JwtUtil.generateToken("admin", "ademir@email");
+        //return "Login";
     }
 }
