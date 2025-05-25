@@ -11,8 +11,9 @@ import com.example.demo.services.CloudinaryService;
 import com.example.demo.services.FuncionarioService;
 import com.example.demo.services.CriptoService;
 import com.example.demo.DTOs.LivroDTO;
-import com.example.demo.Utilitarios.JwtUtil;
+//import com.example.demo.Utilitarios.JwtUtil;
 import com.example.demo.DTOs.FuncionarioDTO;
+import com.example.demo.models.ADM;
 import com.example.demo.models.Autor;
 import com.example.demo.models.Editora;
 import com.example.demo.models.Gerente;
@@ -31,6 +32,7 @@ public class MainController {
     private final CloudinaryService cloudinaryService;
     private final FuncionarioService funcionarioService;
     private final CriptoService criptoService;
+    private final ADM adm;
 
     public MainController(
         AutorService autorService,
@@ -38,14 +40,15 @@ public class MainController {
         EditoraService editoraService,
         FuncionarioService funcionarioService,
         CloudinaryService cloudinaryService,
-        CriptoService criptoService) {
+        CriptoService criptoService,
+        ADM adm) {
         this.editoraService = editoraService;
         this.autorService = autorService;
         this.livroService = livroService;
         this.cloudinaryService = cloudinaryService;
         this.funcionarioService = funcionarioService;
         this.criptoService = criptoService;
-
+        this.adm = adm;
     }
     public void nada(){
         
@@ -103,7 +106,8 @@ public class MainController {
 
     @GetMapping("/public/login")
     public String login(){
-        return JwtUtil.generateToken("admin", "ademir@email");
-        //return "Login";
+        //return JwtUtil.generateToken("admin", "ademir@email");
+        System.out.println(adm.getLogin());
+        return "login";
     }
 }

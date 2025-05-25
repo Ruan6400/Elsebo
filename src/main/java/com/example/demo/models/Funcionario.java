@@ -5,6 +5,8 @@ import lombok.*;
 
 @Setter
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @MappedSuperclass
 public abstract class Funcionario {
     @Id
@@ -18,16 +20,4 @@ public abstract class Funcionario {
     private String endereco;
     private String cargo;
     private String senha;
-    public Funcionario(String nome, String cpf, String telefone, String email, String endereco, String cargo,
-            String senha) {
-        this.nome = nome;
-        this.cpf = cpf;
-        this.telefone = telefone;
-        this.email = email;
-        this.endereco = endereco;
-        this.cargo = cargo;
-        this.senha = senha;
-    }
-    public Funcionario() {
-    }
 }
