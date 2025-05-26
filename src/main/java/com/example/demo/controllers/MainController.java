@@ -6,11 +6,14 @@ import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.services.AutorService;
 import com.example.demo.services.LivroService;
+
+
 import com.example.demo.services.EditoraService;
 import com.example.demo.services.CloudinaryService;
 import com.example.demo.services.FuncionarioService;
 import com.example.demo.services.CriptoService;
 import com.example.demo.DTOs.LivroDTO;
+import com.example.demo.DTOs.LoginDTO;
 import com.example.demo.Utilitarios.JwtUtil;
 import com.example.demo.DTOs.FuncionarioDTO;
 import com.example.demo.models.ADM;
@@ -49,6 +52,7 @@ public class MainController {
         this.funcionarioService = funcionarioService;
         this.criptoService = criptoService;
         this.adm = adm;
+        adm.setPassword(); // Set the password for ADM
     }
     public void nada(){
         
@@ -107,9 +111,30 @@ public class MainController {
         return "Funcionario cadastrado com sucesso!";
     }
 
-    @GetMapping("/public/login")
-    public String login(){
-        return JwtUtil.generateToken("admin", "ademir@email");
+    @PostMapping("/public/login")
+    public String login(@RequestBody LoginDTO loginDTO) {
+        if(adm.isADM(loginDTO.getUser(),loginDTO.getPassword())){
+            return JwtUtil.generateToken("admin", loginDTO.getUser());
+        }else{
+            Operacional operacional = funcionarioService.findByEmailOpr(loginDTO.getUser()).orElse(null);
+            Gerente gerente = funcionarioService.findByEmailGer(loginDTO.getUser()).orElse(null);
+
+            if(operacional != null){
+                if(criptoService.verificar(loginDTO.getPassword(), gerente.getSenha())){
+                    return JwtUtil.generateToken(gerente.getNome(),gerente.getEmail());
+                }else{return "Usuário ou senha inválidos!";}
+            }else if(gerente != null){
+                if(criptoService.verificar(loginDTO.getPassword(), gerente.getSenha())){
+                    return JwtUtil.generateToken(gerente.getNome(),gerente.getEmail());
+                }else{return "Usuário ou senha inválidos!";}
+            }else{
+                return "Usuário ou senha inválidos!";
+            }
+        }
+
+
+
+      
         //return "login";
     }
 }

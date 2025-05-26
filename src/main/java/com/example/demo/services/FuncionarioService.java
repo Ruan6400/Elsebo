@@ -1,4 +1,6 @@
 package com.example.demo.services;
+import java.util.Optional;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import com.example.demo.models.Funcionario;
@@ -36,6 +38,14 @@ public class FuncionarioService {
     }
     public <T extends Funcionario> T DTO(FuncionarioDTO funcionarioDTO,Class<T> tipo){
         return modelMapper.map(funcionarioDTO, tipo);
+    }
+
+    public Optional<Operacional> findByEmailOpr(String email) {
+        return operacionalRepository.findByEmail(email);
+    }
+
+    public Optional<Gerente> findByEmailGer(String email) {
+        return gerenteRepository.findByEmail(email);
     }
 
 }
