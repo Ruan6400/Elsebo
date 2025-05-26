@@ -11,7 +11,7 @@ import com.example.demo.services.CloudinaryService;
 import com.example.demo.services.FuncionarioService;
 import com.example.demo.services.CriptoService;
 import com.example.demo.DTOs.LivroDTO;
-//import com.example.demo.Utilitarios.JwtUtil;
+import com.example.demo.Utilitarios.JwtUtil;
 import com.example.demo.DTOs.FuncionarioDTO;
 import com.example.demo.models.ADM;
 import com.example.demo.models.Autor;
@@ -87,27 +87,29 @@ public class MainController {
     
     @PostMapping("/protected/cadastrar")
     public String cadastrar(@RequestBody FuncionarioDTO funcionarioDTO) {
-        if(funcionarioDTO.FaltaInformacao()) {
+        /*if(funcionarioDTO.FaltaInformacao()) {
             return "Faltam informações!";
-        }
+        }*/
         funcionarioDTO.setSenha(criptoService.codificar(funcionarioDTO.getSenha()));
-        
+
+
+        Class<? extends Funcionario> tipoFuncionario;
+
+
         if(funcionarioDTO.getNivelCargo().equals("gerente")) {
-            Funcionario funcionario = new Gerente(funcionarioDTO);
-            funcionarioService.cadastrar(funcionario);
+            tipoFuncionario = Gerente.class;
         } else if(funcionarioDTO.getNivelCargo().equals("operacional")) {
-            Funcionario funcionario = new Operacional(funcionarioDTO);
-            funcionarioService.cadastrar(funcionario);
+            tipoFuncionario = Operacional.class;
         } else {
             return "Cargo inválido!";
         }
+        funcionarioService.cadastrar(funcionarioService.DTO(funcionarioDTO, tipoFuncionario));
         return "Funcionario cadastrado com sucesso!";
     }
 
     @GetMapping("/public/login")
     public String login(){
-        //return JwtUtil.generateToken("admin", "ademir@email");
-        System.out.println(adm.getLogin());
-        return "login";
+        return JwtUtil.generateToken("admin", "ademir@email");
+        //return "login";
     }
 }
